@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIND_CORE // Cyberpunk Mental Tracker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Orbitron & Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#080811',
+                            card: '#10121b',
+                            yellow: '#fcee0a',
+                            pink: '#ff0055',
+                            cyan: '#00f0ff',
+                            purple: '#9d00ff',
+                            darkBorder: '#232738'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #080811;
+            color: #00f0ff;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 0, 85, 0.15), transparent 70%),
+                linear-gradient(to bottom, rgba(8, 8, 17, 0.8), rgba(8, 8, 17, 0.95)),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 3px, rgba(0, 240, 255, 0.03) 3px);
+            background-attachment: fixed;
+        }
+
+        /* Cyberpunk Neon Glow Effects */
+        .neon-border-yellow {
+            border: 1px solid #fcee0a;
+            box-shadow: 0 0 10px rgba(252, 238, 10, 0.3), inset 0 0 10px rgba(252, 238, 10, 0.1);
+        }
+        .neon-border-pink {
+            border: 1px solid #ff0055;
+            box-shadow: 0 0 12px rgba(255, 0, 85, 0.4);
+        }
+        .neon-border-cyan {
+            border: 1px solid #00f0ff;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+        }
+        
+        .neon-text-yellow {
+            text-shadow: 0 0 8px rgba(252, 238, 10, 0.6);
+        }
+        .neon-text-pink {
+            text-shadow: 0 0 8px rgba(255, 0, 85, 0.7);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+        }
+
+        /* Cyberpunk Corner Cuts */
+        .cyber-clip {
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+        }
+        .cyber-btn-clip {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        /* Scanline Anim */
+        .scanline {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(0,240,255,0.1) 50%, rgba(255,255,255,0));
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 select-none">
+
+    <!-- Header Section -->
+    <header class="max-w-4xl mx-auto w-full mb-8 text-center relative">
+        <div class="inline-block bg-cyber-pink text-black text-[10px] font-orbitron font-extrabold px-3 py-0.5 tracking-widest uppercase mb-2 cyber-btn-clip">
+            System Status: Cyberware Normal
+        </div>
+        <div class="flex items-center justify-center gap-3 mb-1">
+            <i class="fa-solid fa-microchip text-3xl text-cyber-yellow animate-pulse"></i>
+            <h1 class="text-3xl md:text-5xl font-extrabold font-orbitron tracking-wider text-cyber-yellow neon-text-yellow uppercase">
+                MIND_CORE <span class="text-cyber-pink">//</span> v2.077
+            </h1>
+        </div>
+        <p class="text-cyber-cyan/80 text-xs md:text-sm font-orbitron tracking-widest">
+            [ CYBERWARE PSYCHEDELIC MENTAL MONITORING SYSTEM ]
+        </p>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+        <!-- Left Column: Affirmation & Today's Input -->
+        <section class="md:col-span-2 space-y-6">
+            
+            <!-- Cyber Protocol Affirmation Card -->
+            <div class="bg-cyber-card/90 rounded-none p-6 neon-border-cyan cyber-clip relative overflow-hidden">
+                <div class="scanline absolute inset-0 pointer-events-none"></div>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[11px] font-orbitron font-bold text-cyber-bg bg-cyber-cyan px-2.5 py-0.5 uppercase tracking-wider">
+                        // NEURAL_MOTTO
+                    </span>
+                    <button onclick="getRandomAffirmation()" class="text-cyber-yellow hover:text-white text-xs flex items-center gap-1 font-orbitron transition">
+                        <i class="fa-solid fa-rotate text-[10px]"></i> RE-SYNC
+                    </button>
+                </div>
+                <p id="affirmationText" class="text-base md:text-lg font-medium text-white my-3 leading-relaxed border-l-2 border-cyber-pink pl-3">
+                    "나이트 시티에서 살아남는 건 힘이 아니라, 흔들리지 않는 정신이다."
+                </p>
+            </div>
+
+            <!-- Emotion & Log Entry Card -->
+            <div class="bg-cyber-card/90 rounded-none p-6 neon-border-yellow cyber-clip">
+                <h2 class="text-lg font-bold font-orbitron text-cyber-yellow mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-cyber-pink"></i> LOG_EMOTIONAL_SYNC
+                </h2>
+                
+                <form id="journalForm" onsubmit="saveEntry(event)" class="space-y-4">
+                    <!-- Emotion Selector -->
+                    <div>
+                        <label class="block text-xs font-orbitron text-cyber-cyan mb-2">SELECT CURRENT MENTAL STATE</label>
+                        <div class="grid grid-cols-5 gap-2" id="moodSelector">
+                            <button type="button" onclick="selectMood('OVERCLOCK', '⚡', this)" class="mood-btn p-2.5 bg-cyber-bg border border-cyber-darkBorder hover:border-cyber-yellow flex flex-col items-center justify-center transition active">
+                                <span class="text-xl mb-1">⚡</span>
+                                <span class="text-[10px] font-orbitron text-cyber-yellow">OVERCLOCK</span>
+                            </button>
+                            <button type="button" onclick="selectMood('STABLE', '🛡️', this)" class="mood-btn p-2.5 bg-cyber-bg border border-cyber-darkBorder hover:border-cyber-cyan flex flex-col items-center justify-center transition">
+                                <span class="text-xl mb-1">🛡️</span>
+                                <span class="text-[10px] font-orbitron text-cyber-cyan">STABLE</span>
+                            </button>
+                            <button type="button" onclick="selectMood('HYPER', '🔥', this)" class="mood-btn p-2.5 bg-cyber-bg border border-cyber-darkBorder hover:border-cyber-pink flex flex-col items-center justify-center transition">
+                                <span class="text-xl mb-1">🔥</span>
+                                <span class="text-[10px] font-orbitron text-cyber-pink">HYPER</span>
+                            </button>
+                            <button type="button" onclick="selectMood('DRAINED', '💀', this)" class="mood-btn p-2.5 bg-cyber-bg border border-cyber-darkBorder hover:border-gray-500 flex flex-col items-center justify-center transition">
+                                <span class="text-xl mb-1">💀</span>
+                                <span class="text-[10px] font-orbitron text-gray-400">DRAINED</span>
+                            </button>
+                            <button type="button" onclick="selectMood('GLITCH', '👾', this)" class="mood-btn p-2.5 bg-cyber-bg border border-cyber-darkBorder hover:border-cyber-purple flex flex-col items-center justify-center transition">
+                                <span class="text-xl mb-1">👾</span>
+                                <span class="text-[10px] font-orbitron text-cyber-purple">GLITCH</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Short Journal Note -->
+                    <div>
+                        <label for="journalText" class="block text-xs font-orbitron text-cyber-cyan mb-1">INPUT SYSTEM MEMORANDUM</label>
+                        <textarea id="journalText" rows="3" required placeholder="오늘 사이버웨어 상태는 어떤가요? 정신 과부하를 막기 위해 기록하세요." class="w-full p-3 bg-cyber-bg border border-cyber-darkBorder focus:border-cyber-cyan focus:outline-none text-white text-sm resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-cyber-yellow hover:bg-yellow-300 text-black font-orbitron font-bold py-3 cyber-btn-clip transition duration-150 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-terminal"></i> EXECUTE_LOG_SAVE()
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Right Column: Habit Checklist & Cybernetics Note -->
+        <section class="space-y-6">
+            
+            <!-- Daily Habit Checklist -->
+            <div class="bg-cyber-card/90 rounded-none p-6 neon-border-pink cyber-clip">
+                <h2 class="text-lg font-bold font-orbitron text-cyber-pink mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyber-yellow"></i> CYBER_ROUTINE
+                </h2>
+                <div class="space-y-3" id="habitList">
+                    <label class="flex items-center gap-3 p-2 bg-cyber-bg border border-cyber-darkBorder cursor-pointer hover:border-cyber-pink transition">
+                        <input type="checkbox" onchange="toggleHabit(this)" class="accent-cyber-pink w-4 h-4">
+                        <span class="text-xs font-orbitron text-white">수분 공급 팩 흡입 (2L) 💧</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 bg-cyber-bg border border-cyber-darkBorder cursor-pointer hover:border-cyber-pink transition">
+                        <input type="checkbox" onchange="toggleHabit(this)" class="accent-cyber-pink w-4 h-4">
+                        <span class="text-xs font-orbitron text-white">뉴럴 쿨링 딥-브레스 🧘</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 bg-cyber-bg border border-cyber-darkBorder cursor-pointer hover:border-cyber-pink transition">
+                        <input type="checkbox" onchange="toggleHabit(this)" class="accent-cyber-pink w-4 h-4">
+                        <span class="text-xs font-orbitron text-white">신체 관절 모터 스트레칭 🙆</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 bg-cyber-bg border border-cyber-darkBorder cursor-pointer hover:border-cyber-pink transition">
+                        <input type="checkbox" onchange="toggleHabit(this)" class="accent-cyber-pink w-4 h-4">
+                        <span class="text-xs font-orbitron text-white">자아 인식 페이스 미소 짓기 😊</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Privacy & Ethics Card -->
+            <div class="bg-cyber-bg rounded-none p-5 border border-cyber-cyan/40">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-shield-halved text-cyber-cyan text-lg mt-0.5"></i>
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-cyber-cyan uppercase tracking-wider mb-1">ENCRYPTED LOCAL STORAGE</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            모든 로그는 기업(Arasaka, Militech 등) 외부 서버로 유출되지 않으며, 오직 당신의 단말기(Local Storage)에 암호화되어 보관됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- History / Logs Section -->
+    <section class="max-w-4xl mx-auto w-full mb-8">
+        <div class="bg-cyber-card/90 rounded-none p-6 neon-border-cyan cyber-clip">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold font-orbitron text-cyber-cyan flex items-center gap-2">
+                    <i class="fa-solid fa-database text-cyber-yellow"></i> MEMORY_BANKS // ARCHIVE
+                </h2>
+                <button onclick="clearHistory()" class="text-xs font-orbitron text-cyber-pink hover:underline transition">
+                    [PURGE_ALL_DATA]
+                </button>
+            </div>
+            
+            <div id="historyList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                <!-- Records will be rendered here -->
+                <p id="emptyMessage" class="text-xs font-orbitron text-gray-500 text-center py-6">// NO_DATA_FOUND. INITIALIZE YOUR FIRST LOG.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Toast Message Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-cyber-yellow text-black font-orbitron font-bold px-5 py-3 cyber-btn-clip shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none z-50">
+        <i class="fa-solid fa-square-check text-black"></i>
+        <span id="toastMessage" class="text-xs uppercase">DATA_SYNC_SUCCESSFUL</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="max-w-4xl mx-auto w-full text-center text-xs font-orbitron text-gray-600 pt-4 border-t border-cyber-darkBorder">
+        <p>MIND_CORE SYSTEM © 2077 // EDGERUNNER MENTAL SAFETY PROTOCOL.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State variables
+        let selectedMoodData = { name: 'OVERCLOCK', emoji: '⚡' };
+
+        // Cyberpunk Affirmations Array
+        const affirmations = [
+            "나이트 시티에서 살아남는 건 힘이 아니라, 흔들리지 않는 정신이다.",
+            "데이비드처럼 전속력으로 달릴 필요는 없다. 내 페이스대로 적응하라.",
+            "임플란트가 한계를 맞이하더라도, 당신의 인간성은 꺼지지 않는다.",
+            "어떤 노이즈 속에서도 나만의 코드를 지켜내라.",
+            "오늘의 실패는 시스템 에러일 뿐이다. 내일 다시 리부트하면 된다.",
+            "엣지 위를 걷는 사이버펑크도 푹 쉬어갈 쿨타임이 필요한 법이다."
+        ];
+
+        // Random Affirmation Generator
+        function getRandomAffirmation() {
+            const randomIndex = Math.floor(Math.random() * affirmations.length);
+            document.getElementById('affirmationText').innerText = `"${affirmations[randomIndex]}"`;
+        }
+
+        // Mood Selection
+        function selectMood(name, emoji, element) {
+            selectedMoodData = { name, emoji };
+            
+            // Remove active style from all buttons
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('border-cyber-yellow', 'border-cyber-cyan', 'border-cyber-pink', 'border-cyber-purple', 'bg-cyber-card');
+                btn.classList.add('border-cyber-darkBorder', 'bg-cyber-bg');
+            });
+
+            // Add active style to clicked button
+            element.classList.remove('border-cyber-darkBorder', 'bg-cyber-bg');
+            element.classList.add('border-cyber-yellow', 'bg-cyber-card');
+        }
+
+        // Habit Toggle Effect
+        function toggleHabit(checkbox) {
+            const label = checkbox.parentElement;
+            if (checkbox.checked) {
+                label.classList.add('line-through', 'opacity-40');
+                showToast("[ROUTINE_COMPLETED] +10XP ⚡");
+            } else {
+                label.classList.remove('line-through', 'opacity-40');
+            }
+        }
+
+        // Save Entry to LocalStorage
+        function saveEntry(event) {
+            event.preventDefault();
+
+            const textInput = document.getElementById('journalText');
+            const text = textInput.value.trim();
+
+            if (!text) return;
+
+            const now = new Date();
+            const dateString = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            const entry = {
+                id: Date.now(),
+                date: dateString,
+                mood: selectedMoodData.name,
+                emoji: selectedMoodData.emoji,
+                note: text
+            };
+
+            // Get existing logs or initialize
+            const history = JSON.parse(localStorage.getItem('cyber_mind_history') || '[]');
+            history.unshift(entry); // Add at top
+            localStorage.setItem('cyber_mind_history', JSON.stringify(history));
+
+            // Reset form
+            textInput.value = '';
+            showToast("DATA_RECORDED // SYNC_COMPLETE 🤍");
+
+            // Refresh UI
+            renderHistory();
+        }
+
+        // Render Saved Logs
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('cyber_mind_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = `<p id="emptyMessage" class="text-xs font-orbitron text-gray-500 text-center py-6">// NO_DATA_FOUND. INITIALIZE YOUR FIRST LOG.</p>`;
+                return;
+            }
+
+            historyList.innerHTML = history.map(item => `
+                <div class="p-3 bg-cyber-bg border border-cyber-darkBorder flex items-start justify-between gap-3 cyber-btn-clip">
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl bg-cyber-card p-1.5 border border-cyber-cyan/30">${item.emoji}</span>
+                        <div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-orbitron font-bold text-cyber-yellow">${item.mood}</span>
+                                <span class="text-[10px] font-orbitron text-gray-500">${item.date}</span>
+                            </div>
+                            <p class="text-xs text-gray-200 leading-relaxed">${escapeHtml(item.note)}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteEntry(${item.id})" class="text-gray-500 hover:text-cyber-pink text-xs p-1 transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Delete Individual Entry
+        function deleteEntry(id) {
+            let history = JSON.parse(localStorage.getItem('cyber_mind_history') || '[]');
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem('cyber_mind_history', JSON.stringify(history));
+            renderHistory();
+            showToast("SECTOR_DELETED");
+        }
+
+        // Clear All History
+        function clearHistory() {
+            if (confirm("모든 신경 데이터 기록을 영구 파기하시겠습니까?")) {
+                localStorage.removeItem('cyber_mind_history');
+                renderHistory();
+                showToast("ALL_SYSTEM_LOGS_PURGED");
+            }
+        }
+
+        // Custom Toast Display Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Utility: HTML Escaping
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderHistory();
+            getRandomAffirmation();
+        }
+    </script>
+</body>
+</html>
